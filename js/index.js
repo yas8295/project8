@@ -94,6 +94,7 @@ class App {
   #workout = [];
 
   constructor() {
+    this.#workout.forEach((e) => this._showSavedMarker(e));
     this._getWorkouts();
     this._showMap();
     this._showWorkout();
@@ -118,7 +119,6 @@ class App {
     }).addTo(this.#map);
 
     this.#map.on("click", this._showForm.bind(this));
-    this.#workout.forEach((e) => this._showSavedMarker(e));
   }
 
   // show form
