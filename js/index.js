@@ -1,8 +1,11 @@
 const addSections = function () {
   let html = ` 
     <section class="p-4 d-flex flex-wrap vh-100 w-100">
-        <div class="h-100 workout-section col-12 col-lg-4 py-5 px-5 text-center overflow-auto"
+        <div class="h-100 workout-section col-12 col-lg-4 py-5 px-5 
+        text-center overflow-auto"
             style="background-color: #2d3439;">
+             <button class="btn reset bg-secondary border-info text-light btn-lg rounded-3" type="button"
+        style="padding: 5px;outline: none;font-size: 14px;position: absolute; right: 10px; top: 10px;">Reset</button>
             <img src="images/logo.png" alt="" width="140px" style="margin-bottom: 20px;">
             <form class="form hidden d-flex flex-column gap-3" action="">
                 <div class="d-flex align-items-center w-100 justify-content-center">
@@ -36,12 +39,12 @@ addSections();
 
 let form = document.querySelector(".form");
 let workoutContainer = document.querySelector(".workout-container");
-let workoutBox = document.querySelector(".workout-container");
 let options = document.querySelector(".options");
 let scText = document.querySelector(".sc-label");
 let inputDistance = document.querySelector(".distance");
 let inputDuration = document.querySelector(".duration");
 let inputsc = document.querySelector(".sc-value");
+let resetBtn = document.querySelector(".reset");
 
 // get date
 let getMonth = [
@@ -94,13 +97,14 @@ class App {
   #workout = [];
 
   constructor() {
-    this.#workout.forEach((e) => this._showSavedMarker(e));
+    resetBtn.addEventListener("click", this._resetApp.bind(this));
     this._getWorkouts();
     this._showMap();
     this._showWorkout();
     options.addEventListener("change", this._toggleType);
     form.addEventListener("submit", this._workout);
-    workoutBox.addEventListener("click", this._moveTo);
+    workoutContainer.addEventListener("click", this._moveTo);
+    workoutContainer.addEventListener("click", this._deleteWorkout);
   }
 
   // show map
@@ -119,6 +123,7 @@ class App {
     }).addTo(this.#map);
 
     this.#map.on("click", this._showForm.bind(this));
+    this.#workout.forEach((e) => this._showSavedMarker(e));
   }
 
   // show form
@@ -202,11 +207,15 @@ class App {
     } else {
       workoutContainer.innerHTML = "";
       workout.forEach(function (e) {
-        let workoutType = `<div class="workout ${
+        let workoutType = `<div class="workout position-relative ${
           e.type
         } d-flex flex-column gap-4 align-items-start" data-lat="${
           e.position[0]
-        }" data-lng="${e.position[1]}">
+        }" data-lng="${e.position[1]}" data-id="${e.id}">
+        <h5 class="position-absolute delete-workout"
+        style="right: 10px; top: 10px; margin: 0px 0px !important; color: white !important; cursor: pointer; height: fit-content;">
+        X
+    </h5>
                 <h3>${
                   String(e.type)[0].toUpperCase() + String(e.type).slice(1)
                 } on  ${e.date}</h3>
@@ -289,6 +298,31 @@ class App {
     } else {
       data.forEach((e) => this.#workout.push(e));
       this._showWorkout(this.#workout);
+    }
+  }
+
+  // delete workout
+  _deleteWorkout(e) {
+    let btn = e.target;
+    if (btn === e.target.closest(".delete-workout")) {
+      let workout = app.#workout.findIndex(
+        (e) => e.id === Number(btn.parentElement.dataset.id)
+      );
+      app.#workout.splice(workout, workout + 1);
+      app._showWorkout(app.#workout);
+      app._saveWorkouts();
+    }
+  }
+
+  // reset app
+  _resetApp() {
+    if (app.#workout === undefined) {
+      return;
+    } else {
+      localStorage.clear("workouts");
+      app.#workout = [];
+      workoutContainer.innerHTML = "";
+      location.reload();
     }
   }
 }
