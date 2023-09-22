@@ -95,6 +95,7 @@ class App {
   #map;
   #mapPosition = [];
   #workout = [];
+  #markers = [];
 
   constructor() {
     resetBtn.addEventListener("click", this._resetApp.bind(this));
@@ -103,7 +104,7 @@ class App {
     this._showWorkout();
     options.addEventListener("change", this._toggleType);
     form.addEventListener("submit", this._workout);
-    workoutContainer.addEventListener("click", this._moveTo);
+    // workoutContainer.addEventListener("click", this._moveTo);
     workoutContainer.addEventListener("click", this._deleteWorkout);
   }
 
@@ -182,7 +183,7 @@ class App {
 
   // show marker
   _showMarker() {
-    L.marker([app.#mapPosition[0], app.#mapPosition[1]])
+    let marker = new L.marker([app.#mapPosition[0], app.#mapPosition[1]])
       .addTo(app.#map)
       .bindPopup(
         L.popup({
@@ -198,6 +199,8 @@ class App {
         } on ${getMonth[new Date().getMonth()]} ${new Date().getDate()}`
       )
       .openPopup();
+    app.#markers.push(marker);
+    app.#map.addLayer(marker);
   }
 
   // show workout content
@@ -267,7 +270,7 @@ class App {
 
   // show saved marker
   _showSavedMarker(e) {
-    L.marker([e.position[0], e.position[1]])
+    let marker = new L.marker([e.position[0], e.position[1]])
       .addTo(this.#map)
       .bindPopup(
         L.popup({
@@ -282,6 +285,8 @@ class App {
         } on ${e.date}`
       )
       .openPopup();
+    app.#markers.push(marker);
+    app.#map.addLayer(marker);
   }
 
   // storage workouts
@@ -308,7 +313,9 @@ class App {
       let workout = app.#workout.findIndex(
         (e) => e.id === Number(btn.parentElement.dataset.id)
       );
-      app.#workout.splice(workout, workout + 1);
+      app.#map.removeLayer(app.#markers[workout]);
+      app.#markers.splice(workout, 1);
+      app.#workout.splice(workout, 1);
       app._showWorkout(app.#workout);
       app._saveWorkouts();
     }
