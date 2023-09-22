@@ -329,7 +329,9 @@ class App {
       localStorage.clear("workouts");
       app.#workout = [];
       workoutContainer.innerHTML = "";
-      location.reload();
+      for (let x of app.#markers) {
+        app.#map.removeLayer(x);
+      }
     }
   }
 }
