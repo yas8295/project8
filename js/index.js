@@ -4,8 +4,8 @@ const addSections = function () {
         <div class="h-100 workout-section col-12 col-lg-4 py-5 px-5 
         text-center overflow-auto"
             style="background-color: #2d3439;">
-             <button class="btn reset bg-secondary border-info text-light btn-lg rounded-3" type="button"
-        style="padding: 5px;outline: none;font-size: 14px;position: absolute; right: 10px; top: 10px;">Reset</button>
+             <button class="btn reset bg-secondary border text-light btn-lg rounded-3" type="button"
+        style="padding: 5px;outline: none;font-size: 14px;position: absolute; right: 10px; top: 10px; border-color: rgb(171, 255, 75) !important">Reset</button>
             <img src="images/logo.png" alt="" width="140px" style="margin-bottom: 20px;">
             <form class="form hidden d-flex flex-column gap-3" action="">
                 <div class="d-flex align-items-center w-100 justify-content-center">
