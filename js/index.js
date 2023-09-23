@@ -104,7 +104,7 @@ class App {
     this._showWorkout();
     options.addEventListener("change", this._toggleType);
     form.addEventListener("submit", this._workout);
-    // workoutContainer.addEventListener("click", this._moveTo);
+    workoutContainer.addEventListener("click", this._moveTo);
     workoutContainer.addEventListener("click", this._deleteWorkout);
   }
 
